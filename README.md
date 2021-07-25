@@ -1,4 +1,4 @@
-## Timbre
+## TImbre 
 
 ## Como rodar o projeto?
 
