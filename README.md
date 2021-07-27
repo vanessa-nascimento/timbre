@@ -4,8 +4,6 @@
 
 - Recomenda-se ter o `node js 12+` e o `npm 6+` instalado em sua máquina
 
-
-
 ### Back-end
 Entre na pasta backend do projeto e utilize os seguintes comandos:
 

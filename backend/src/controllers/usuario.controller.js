@@ -22,3 +22,23 @@ exports.listAllUsers = async (req, res) => {
   const response = await db.query('SELECT * FROM usuario ORDER BY nome ASC');
   res.status(200).send(response.rows);
 };
+
+// ==> Método responsável por listar um usuário pelo seu id:
+exports.findUserById = async (req, res) => {
+  const userId = parseInt(req.params.id);
+  const response = await db.query('SELECT * FROM usuario WHERE id = $1', [userId]);
+  res.status(200).send(response.rows);
+};
+
+// ==> Método responsável por alterar dados do usuario:
+exports.updateUserById = async (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { nome, email, senha, data_nascimento } = req.body;
+  
+  const response = await db.query(
+    "UPDATE usuario SET nome = $1, email = $2, senha = $3, data_nascimento = $4 WHERE productId = $5",
+    [nome, email, senha, data_nascimento, userId],
+  );
+
+  res.status(201).send({ message: "Usuario atualizado com sucesso!" });
+};
