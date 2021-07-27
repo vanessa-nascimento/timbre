@@ -38,3 +38,18 @@ exports.findEventByToken = async (req, res) => {
   const response = await db.query('SELECT * FROM evento WHERE cod_evento = $1', [codEvento]);
   res.status(200).send(response.rows);
 };
+
+
+// ==> Método responsável por alterar dados do usuario:
+exports.updateEventById = async (req, res) => {
+  const codEvento = parseInt(req.params.id);
+  const { nome, descricao, capacidade_min, capacidade_max, longitude, latitude, preco, data_inicio, data_fim, qt_convite, e_publico } = req.body;
+  
+  const response = await db.query(
+    "UPDATE evento SET nome = $1, descricao = $2, capacidade_min = $3, capacidade_max = $4, longitude = $5, latitude = $6, preco = $7, data_inicio = $8, data_fim = $9, qt_convite = $10, e_publico = $11 WHERE cod_evento = $12",
+    [nome, descricao, capacidade_min, capacidade_max, longitude, latitude, preco, data_inicio, data_fim, qt_convite, e_publico, codEvento],
+  );
+
+  res.status(201).send({ message: "Evento atualizado com sucesso!" });
+};
+

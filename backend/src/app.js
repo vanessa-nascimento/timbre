@@ -11,6 +11,7 @@
  // ==> Rotas da API:
  const index = require('./routes/index');
  const userRoute = require('./routes/usuario.routes');
+ const eventsRoute = require('./routes/evento.routes');
  
  app.use(express.urlencoded({ extended: true }));
  app.use(express.json());
@@ -19,6 +20,7 @@
  
  app.use(index);
  app.use('/api/', userRoute);
+ app.use('/api/', eventsRoute);
  
  module.exports = app;
  

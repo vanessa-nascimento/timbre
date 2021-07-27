@@ -15,13 +15,13 @@
 // ==> Rota responsável por listar todos os eventos: (GET): localhost:3000/api/eventos
 router.get('/eventos/', eventController.listAllEvents);
 
-// ==> Rota responsável por listar o evento pelo seu cod_evento: (GET): localhost:3000/api/eventos/:codigo
-router.get('/eventos/:codigo', eventController.findEventByToken);
+// ==> Rota responsável por listar o evento pelo seu cod_evento: (GET): localhost:3000/api/eventos/:id
+router.get('/eventos/:id', eventController.findEventByToken);
 
 // ==> Rota responsável por listar o evento pelo id do organizador (GET): localhost:3000/api/eventos/:id
 router.get('/eventos/:id', eventController.findEventsById);
 
 // ==> Rota responsável por trocar dados de um evento: (PUT): localhost:3000/api/eventos/:id
-router.get('/eventos/:id', eventController.updateEventById);
+router.put('/eventos/:id', eventController.updateEventById);
 
- module.exports = router;
+module.exports = router;

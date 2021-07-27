@@ -19,6 +19,6 @@ router.get('/usuarios/', userController.listAllUsers);
 router.get('/usuarios/:id', userController.findUserById);
 
 // ==> Rota responsável por trocar dados de um usuario: (PUT): localhost:3000/api/usuarios/:id
-router.get('/usuarios/:id', userController.updateUserById);
+router.put('/usuarios/:id', userController.updateUserById);
 
  module.exports = router;
