@@ -19,7 +19,7 @@ exports.createEvent = async (req, res) => {
 
 // ==> Método responsável por listar todos os eventos:
 exports.listAllEvents = async (req, res) => {
-  const response = await db.query('SELECT * FROM evento ORDER BY nome ASC');
+  const response = await db.query("SELECT * FROM evento WHERE e_publico='0' ORDER BY nome ASC");
   res.status(200).send(response.rows);
 };
 

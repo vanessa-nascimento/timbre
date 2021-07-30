@@ -27,7 +27,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, status, priceSale } = product;
+  const { nome, cover, preco, status, priceSale, descricao } = product;
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -57,31 +57,20 @@ export default function ShopProductCard({ product }) {
               {status}
             </Label>
           )}
-          <ProductImgStyle alt={name} src={cover} />
+          <ProductImgStyle alt={nome} src={cover} />
         </Box>
 
         <Stack spacing={2} sx={{ p: 3 }}>
           <Link to="#" color="inherit" underline="hover" component={RouterLink}>
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {nome}
             </Typography>
           </Link>
 
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <ColorPreview/>
             <Typography variant="subtitle1">
-              <Typography
-                component="span"
-                variant="body1"
-                sx={{
-                  color: 'text.disabled',
-                  textDecoration: 'line-through'
-                }}
-              >
-                {priceSale && fCurrency(priceSale)}
-              </Typography>
-              &nbsp;
-              {fCurrency(price)}
+              {(preco === "0.00") ? 'Grátis' : fCurrency(preco) }
             </Typography>
           </Stack>
           <Stack spacing={2}>
@@ -98,22 +87,27 @@ export default function ShopProductCard({ product }) {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="dialog-mais-detalhes"
+        aria-describedby="dialog-mais-detalhes"
+        fullWidth="fullWidth"
+        maxWidth="md"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="alert-dialog-title">Mais detalhes</DialogTitle>
+        <DialogContent dividers>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            <Typography variant="h3" noWrap>{nome}</Typography>
+            <Typography variant="text" Wrap>{descricao}</Typography>
+            <Typography variant="text" Wrap>Preço: {(preco === "0.00") ? 'Grátis' : fCurrency(preco) }</Typography>
+            <Typography variant="text" Wrap>Capacidade mínima: {preco}</Typography>
+            <Typography variant="text" noWrap>Capacidade máxima: {preco}</Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Disagree
+            fechar
           </Button>
           <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+            Comprar agora
           </Button>
         </DialogActions>
       </Dialog>
