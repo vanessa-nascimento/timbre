@@ -1,5 +1,7 @@
 ## TImbre 
 
+Projeto TImbre - Um app para administrar eventos feito em PostgreSQL + ReactJS + NodeJS para a matéria de ACH2025 Banco de Dados II
+
 ## Como rodar o projeto?
 
 - Recomenda-se ter o `node js 12+` e o `npm 6+` instalado em sua máquina
