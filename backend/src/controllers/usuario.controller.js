@@ -1,7 +1,6 @@
 const db = require("../config/database");
 
 // ==> Método responsável por criar um novo Usuario:
-
 exports.createUser = async (req, res) => {
   const { cpf, nome, email, senha, data_nascimento } = req.body;
   const response = await db.query(
