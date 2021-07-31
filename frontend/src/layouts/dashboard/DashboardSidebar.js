@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@material-ui/core';
@@ -40,14 +39,6 @@ DashboardSidebar.propTypes = {
 };
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    if (isOpenSidebar) {
-      onCloseSidebar();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
 
   const renderContent = (
     <Scrollbar

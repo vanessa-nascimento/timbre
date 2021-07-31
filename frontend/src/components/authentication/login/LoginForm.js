@@ -16,10 +16,14 @@ import {
   FormControlLabel
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
-
+import axios from 'axios';
+import React from 'react';
+import {useAuth} from '../../../auth/Auth';
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+export default async function LoginForm() {
+  const { signed, Login } = useAuth();
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,10 +41,17 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
     onSubmit: () => {
       navigate('/dashboard', { replace: true });
-    }
+    },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  async function handleLogin() {
+    await Login({
+      email: 'rafaelcodomingues@gmail.com',
+      senha: '123456',
+    });
+  }
+
+  const { errors, touched, values, isSubmitting, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -48,7 +59,7 @@ export default function LoginForm() {
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form autoComplete="off" noValidate onSubmit={handleLogin}>
         <Stack spacing={3}>
           <TextField
             fullWidth

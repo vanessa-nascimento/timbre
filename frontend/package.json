@@ -58,6 +58,7 @@
     "framer-motion": "^4.1.17",
     "google-maps-react": "^2.0.6",
     "history": "^5.0.0",
+    "localStorage": "^1.0.4",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",
     "prop-types": "^15.7.2",

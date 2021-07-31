@@ -12,6 +12,9 @@ import MenuPopover from '../../components/MenuPopover';
 //
 import account from '../../_mocks_/account';
 
+import {useAuth} from '../../auth/Auth';
+
+
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -44,6 +47,12 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const { Logout } = useAuth();
+
+  async function handleLogout() {
+    Logout();
+  }
 
   return (
     <>
@@ -110,7 +119,7 @@ export default function AccountPopover() {
         ))}
 
         <Box sx={{ p: 2, pt: 1.5 }}>
-          <Button fullWidth color="inherit" variant="outlined">
+          <Button fullWidth color="inherit" onClick={handleLogout} variant="outlined">
             Sair
           </Button>
         </Box>

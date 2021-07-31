@@ -9,8 +9,7 @@ class Usuario {
     this.data_nascimento = usuario.data_nascimento;
   }
 
-  static async getUser(email) {
-    
+  static async getUser(email) {  
     const result = await db.query(
         `SELECT email, senha FROM usuario WHERE email = $1`, [email])
           .then(res => res.rows[0])
