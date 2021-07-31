@@ -1,5 +1,7 @@
 const db = require("../config/database");
 
+const createTokenJWT = require("../models/user-dao")
+
 // ==> Método responsável por criar um novo Usuario:
 exports.createUser = async (req, res) => {
   const { cpf, nome, email, senha, data_nascimento } = req.body;
@@ -18,6 +20,8 @@ exports.createUser = async (req, res) => {
 
 // ==> Método responsável por logar um Usuario:
 exports.loginUser = async (req, res) => {
+  const token = createTokenJWT(req.user);
+  res.set('Authorization', token)
   res.status(204).send();
 }
 

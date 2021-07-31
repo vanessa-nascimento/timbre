@@ -1,13 +1,4 @@
 const db = require("../config/database");
-const jwt = require('jsonwebtoken');
-
-function createTokenJWT(usuario) {
-  const payload = {
-    id: usuario.id
-  }
-  const token = jwt.sign(payload, 'senha-secreta');
-  return token;
-}
 
 class Usuario {
   constructor(usuario) {
