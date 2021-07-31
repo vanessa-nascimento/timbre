@@ -1,3 +1,6 @@
+import axios from "axios";
+import React from "react";
+
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { experimentalStyled as styled } from '@material-ui/core/styles';
@@ -36,7 +39,33 @@ const ContentStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0)
 }));
 
+const baseURL = "http://localhost:3000/api/cadastro";
+
 export default function Register() {
+  const [cadastro, setCadastro] = React.useState(null);
+
+  React.useEffect(() => {
+    axios.get(`${baseURL}`).then((response) => {
+      setCadastro(response.data);
+    });
+  }, []);
+
+  function createUser() {
+    axios
+      .post(baseURL, {
+        nome: "Hello World!",
+        email: "This is a new post.",
+        senha: "Hello World!",
+        cpf: "Hello World!",
+        data_nascimento: "This is a new post."
+      })
+      .then((response) => {
+        setCadastro(response.data);
+      });
+  }
+
+  if (!cadastro) return "Sem cadastro!"
+
   return (
     <RootStyle title="Cadastre-se | TImbre">
       <AuthLayout>

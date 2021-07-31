@@ -4,7 +4,7 @@ const db = require("../config/database");
 exports.createUser = async (req, res) => {
   const { cpf, nome, email, senha, data_nascimento } = req.body;
   const response = await db.query(
-    "INSERT INTO usuario (cpf, nome, email, senha, data_nascimento) VALUES ($1, $2, $3, $4, $5)",
+    "INSERT INTO usuario (cpf, nome, email, senha, data_nascimento) VALUES ($1, $2, $3, crypt($4, gen_salt('bf')), $5)",
     [cpf, nome, email, senha, data_nascimento],
   );
 
@@ -15,6 +15,33 @@ exports.createUser = async (req, res) => {
     },
   });
 };
+
+// ==> Método responsável por logar um Usuario:
+exports.loginUser = async (req, res) => {
+  res.status(204).send();
+}
+
+
+//   if(response) {
+//     const id = await db.query(
+//       "SELECT id FROM usuario WHERE email=$1 AND senha=$2", [email, senha],
+//     );
+
+//     const token = jwt.sign({ id }, process.env.SECRET, {
+//       expiresIn: 1200 // expires in 5min
+//     });
+//     return res.json({ auth: true, token: token });
+//   }
+  
+//   res.status(500).json({message: 'Login inválido!'});
+
+// };
+
+// // ==> Método responsável por deslogar um Usuario:
+// exports.logoutUser = async (req, res) => {
+//   res.json({ auth: false, token: null });
+// };
+
 
 // ==> Método responsável por listar todos os usuários:
 exports.listAllUsers = async (req, res) => {

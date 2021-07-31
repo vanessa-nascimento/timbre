@@ -12,6 +12,8 @@
  const index = require('./routes/index');
  const userRoute = require('./routes/usuario.routes');
  const eventsRoute = require('./routes/evento.routes');
+ const modelUser = require('./models/user');
+ const authUser = require('./auth/auth');
  
  app.use(express.urlencoded({ extended: true }));
  app.use(express.json());
@@ -21,6 +23,8 @@
  app.use(index);
  app.use('/api/', userRoute);
  app.use('/api/', eventsRoute);
+ app.use(express.json())
+ app.use(express.urlencoded({ extended: true}))
  
  module.exports = app;
  

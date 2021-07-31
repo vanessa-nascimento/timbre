@@ -3,7 +3,22 @@ import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 
 // material
-import { Box, Button, Card, Link, Typography, Grid, Stack, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@material-ui/core';
+import { 
+  Box, 
+  Button, 
+  Card, 
+  Link, 
+  Typography, 
+  Grid, 
+  Stack, 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  DialogContentText, 
+  DialogActions, 
+  TextField, 
+  FormGroup 
+} from '@material-ui/core';
 import { experimentalStyled as styled } from '@material-ui/core/styles';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
@@ -29,19 +44,29 @@ ShopProductCard.propTypes = {
 
 export default function ShopProductCard({ product }) {
   const { nome, preco, status, descricao, capacidade_min, capacidade_max, latitude, longitude } = product;
-  const [open, setOpen] = React.useState(false);
+  const [openMoreDetails, setOpenDetails] = React.useState(false);
+  const [openPayment, setPayment] = React.useState(false);
 
   const MY_API = 'AIzaSyCRN1MfsabTqX35m29e4TU0rr4aC9q2O_o';
   var querystring = 'q='+latitude+','+longitude;
   let url_location =  `https://www.google.com/maps/embed/v1/place?key=${MY_API}&`+querystring;
   
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenDetails = () => {
+    setOpenDetails(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
+  };
+
+  const handleClickOpenPayment = () => {
+    setPayment(true);
+  };
+
+  const handleClosePayment = () => {
+    setPayment(false);
+    setOpenDetails(false);
   };
 
   return (
@@ -80,10 +105,10 @@ export default function ShopProductCard({ product }) {
             </Typography>
           </Stack>
           <Stack spacing={2}>
-            <Button to="#" color="primary" variant="outlined" onClick={handleClickOpen}>
+            <Button to="#" color="primary" variant="outlined" onClick={handleClickOpenDetails}>
               Ver detalhes
             </Button>
-            <Button to="#" color="primary" variant="contained" component={RouterLink}>
+            <Button to="#" color="primary" variant="contained" onClick={handleClickOpenPayment} component={RouterLink}>
               Comprar Ingresso
             </Button>
           </Stack>
@@ -91,8 +116,8 @@ export default function ShopProductCard({ product }) {
       </Card>
       {/* dialog de detalhes do produto */}
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={openMoreDetails}
+        onClose={handleCloseDetails}
         aria-labelledby="dialog-mais-detalhes"
         aria-describedby="dialog-mais-detalhes"
         fullWidth="fullWidth"
@@ -128,10 +153,66 @@ export default function ShopProductCard({ product }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleCloseDetails} color="primary">
             Voltar
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onClick={handleClickOpenPayment} color="primary" autoFocus>
+            Comprar agora
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+      {/* dialog de compra de ingresso */}
+      <Dialog
+        open={openPayment}
+        onClose={handleClosePayment}
+        aria-labelledby="dialog-compra"
+        aria-describedby="dialog-compra"
+        fullWidth="fullWidth"
+        maxWidth="lg"
+      >
+        <DialogTitle id="alert-dialog-title">Pagamento</DialogTitle>
+        <DialogContent dividers>
+          <DialogContentText id="alert-dialog-description">
+            <Stack mt={3}>
+              <Typography variant="h3" Wrap>Confirme os dados</Typography>
+            </Stack>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h4" Wrap>{nome}</Typography>
+                <Typography variant="subtitle1" Wrap>{descricao}</Typography>
+                <Stack mt={3}>
+                  <Typography variant="subtitle1" Wrap>Localização:</Typography>
+                  <iframe frameBorder="0" width="100%" height="100%"  src={url_location}></iframe>
+                </Stack>
+                <Stack mt={3}>
+                  <Typography variant="h4">
+                    <p>Preço: {(preco === "0.00") ? 'Grátis' : fCurrency(preco) }</p>
+                  </Typography>
+                </Stack>
+                <br/>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <form noValidate autoComplete="off">
+                  <TextField fullWidth id="outlined-basic" label="Nome" />
+                  <TextField fullWidth id="outlined-basic" label="CPF" />
+                  {/* se não for gratis */}
+                  <FormGroup>
+                      <TextField fullWidth id="outlined-basic" label="Numero do Cartão" />
+                      <TextField fullWidth id="outlined-basic" label="Vencimento do Cartão" />
+                      <TextField fullWidth id="outlined-basic" label="CVV" />
+                  </FormGroup>
+                </form>
+              </Grid>
+            </Grid>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePayment} color="primary">
+            Voltar
+          </Button>
+          <Button onClick={handleClosePayment} color="primary" autoFocus>
             Comprar agora
           </Button>
         </DialogActions>
