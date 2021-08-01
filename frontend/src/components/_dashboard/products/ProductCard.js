@@ -180,8 +180,12 @@ export default function ShopProductCard({ product }) {
             </Stack>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
-                <Typography variant="h4" Wrap>{nome}</Typography>
-                <Typography variant="subtitle1" Wrap>{descricao}</Typography>
+                <Stack mb={2}>
+                  <Typography variant="h4" Wrap>{nome}</Typography>
+                </Stack>
+                <Stack mb={2}>
+                  <Typography variant="subtitle1" Wrap>{descricao}</Typography>
+                </Stack>
                 <Stack mt={3}>
                   <Typography variant="subtitle1" Wrap>Localização:</Typography>
                   <iframe frameBorder="0" width="100%" height="100%"  src={url_location}></iframe>

@@ -17,27 +17,27 @@ import { fDateTime } from '../../../utils/formatTime';
 
 const TIMELINES = [
   {
-    title: '1983, orders, $4220',
+    title: 'Festa de casamento',
     time: faker.date.past(),
     type: 'order1'
   },
   {
-    title: '12 Invoices have been paid',
+    title: 'Chá de panela',
     time: faker.date.past(),
     type: 'order2'
   },
   {
-    title: 'Order #37745 from September',
+    title: 'Festa na cidade',
     time: faker.date.past(),
     type: 'order3'
   },
   {
-    title: 'New order placed #XF-2356',
+    title: 'Conferência de costureiras',
     time: faker.date.past(),
     type: 'order4'
   },
   {
-    title: 'New order placed #XF-2346',
+    title: 'Jogo de basquete no Ibira',
     time: faker.date.past(),
     type: 'order5'
   }

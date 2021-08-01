@@ -1,7 +1,8 @@
-import { useFormik } from 'formik';
-import { useState } from 'react';
+import axios from "axios";
+import { Form, useFormik } from 'formik';
+import React, { useState } from 'react';
 // material
-import { Container, Stack, Typography, Input, Button } from '@material-ui/core';
+import { Container, Stack, Typography, Input, Button, Grid, FormGroup } from '@material-ui/core';
 // components
 import Page from '../components/Page';
 import {
@@ -10,6 +11,7 @@ import {
   ProductCartWidget,
   ProductFilterSidebar
 } from '../components/_dashboard/products';
+import ShopProductCard from '../components/_dashboard/products/ProductCard';
 //
 import PRODUCTS from '../_mocks_/products';
 
@@ -17,6 +19,10 @@ import PRODUCTS from '../_mocks_/products';
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [openEvento, setOpenEvento] = useState(false);
+  const [codEvento, setCodEvento] = React.useState(null);
+  const [evento, setEvento] = React.useState(null);
+
 
   const formik = useFormik({
     initialValues: {
@@ -31,6 +37,24 @@ export default function EcommerceShop() {
     }
   });
 
+
+  const handleChangeCodEvento = event => {
+    setCodEvento({ codEvento: event.target.value });
+  }
+
+  const handleSubmitCodEvento = event => {
+    event.preventDefault();
+
+    const ola = JSON.stringify(codEvento);
+    const obj = JSON.parse(ola);
+
+    axios.get(`http://localhost:8080/api/eventos/token/${obj.codEvento}`)
+    .then((response) => {
+      setEvento(response.data);
+      setOpenEvento(true);
+    });
+  };
+
   const { resetForm, handleSubmit } = formik;
 
   const handleOpenFilter = () => {
@@ -40,6 +64,7 @@ export default function EcommerceShop() {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
+
 
   const handleResetFilter = () => {
     handleSubmit();
@@ -71,16 +96,20 @@ export default function EcommerceShop() {
             </Typography>
           </Stack>
           <Stack direction="row" spacing={1} sx={{ m: 2 }}>
-            <Input
-              type="text"
-              placeholder="Código do evento"
-            />
-            <Button
-            variant="outlined"
-            to="#"
-          >
-            Verificar
-          </Button>
+            <form onSubmit={handleSubmitCodEvento}>
+              <Input
+                type="text"
+                placeholder="Código do evento"
+                name="codEvento"
+                onChange={handleChangeCodEvento}
+              />
+              <Button
+              variant="outlined"
+              type="submit"
+            >
+              Verificar
+            </Button>
+          </form>
           </Stack>
         </Stack>
           
@@ -96,7 +125,21 @@ export default function EcommerceShop() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        {openEvento ?
+            <Grid container>
+            <p>{evento}</p>
+            {evento.map((evento) => (
+              <Grid key={evento.id_evento} item xs={12} sm={6} md={3}>
+                <ShopProductCard product={evento} />
+              </Grid>
+            ))}
+          </Grid>
+          :
+          <ProductList products={PRODUCTS} />
+        }
+        
+
+
         
       </Container>
     </Page>

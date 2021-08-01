@@ -27,14 +27,15 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dash
 //
 import USERLIST from '../_mocks_/user';
 
+import axios from "axios";
+import React from "react";
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'name', label: 'Nome', alignRight: false },
+  { id: 'role', label: 'Código Evento', alignRight: false },
+  { id: 'status', label: 'Convites', alignRight: false },
   { id: '' }
 ];
 
@@ -68,6 +69,8 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map((el) => el[0]);
 }
+
+const baseURL = "http://localhost:8080/api/eventos/organizador/";
 
 export default function User() {
   const [page, setPage] = useState(0);
@@ -123,11 +126,16 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const [eventosOrganizador, setEventosOrganizador] = React.useState(null);
 
-  const isUserNotFound = filteredUsers.length === 0;
+  React.useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      setEventosOrganizador(response.data);
+    });
+  }, []);
+
+  if (!eventosOrganizador) return null;
 
   return (
     <Page title="Meus eventos | TImbre">
@@ -174,74 +182,50 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
-                <TableBody>
-                  {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
 
-                      return (
-                        <TableRow
-                          hover
-                          key={id}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
+<TableBody>
+                    {eventosOrganizador.map(row => {
+                      const { id_evento, cod_evento, nome, qt_convite, capacidade_min, capacidade_max, e_publico, data_inicio } = row;
+                      const isItemSelected = selected.indexOf(nome) !== -1;
+                      const status = (e_publico === 1) ? 'publico' : 'privado';
+
+                          return (
+                            <TableRow
+                              hover
+                              key={id_evento}
+                              tabIndex={-1}
+                              role="checkbox"
+                              selected={isItemSelected}
+                              aria-checked={isItemSelected}
                             >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell>
+                              <TableCell padding="checkbox">
+                                <Checkbox
+                                  checked={isItemSelected}
+                                  onChange={(event) => handleClick(event, nome)}
+                                />
+                              </TableCell>
+                              <TableCell component="th" scope="row" padding="none">
+                                <Stack direction="row" alignItems="center" spacing={2}>
+                                  <Avatar alt={nome} />
+                                  <Typography variant="subtitle2" noWrap>
+                                    {nome}
+                                  </Typography>
+                                </Stack>
+                              </TableCell>
+                              <TableCell align="left">{cod_evento}</TableCell>
+                              <TableCell align="left">{qt_convite}</TableCell>
 
-                          <TableCell align="right">
-                            <UserMoreMenu />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-                {isUserNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
+                              <TableCell align="right">
+                                <UserMoreMenu />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                    </TableBody>
               </Table>
             </TableContainer>
           </Scrollbar>

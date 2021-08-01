@@ -6,8 +6,8 @@ export function api(text, user) {
             token:
               '91j893h281h9nf98fnf2309jd09jkkd0as98238j9fr8j98f9j8f298r829r-f',
             user: {
-              nome: 'Rafael',
-              email: 'rafaelcodomingues@gmail.com',
+              nome: 'Manoela Costa',
+              email: 'manoela.costa@email.com',
             },
           },
         });
@@ -17,7 +17,7 @@ export function api(text, user) {
   
   export const defaults = {
     headers: {
-      Authorization: '',
+      Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Mjc3MDQxMzF9.s6EEKX2JhbJfg2AXpKy6uDKqnRuQJenS2WrTTOLtyGs',
     },
   };
 

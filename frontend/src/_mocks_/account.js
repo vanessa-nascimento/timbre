@@ -1,8 +1,8 @@
 // ----------------------------------------------------------------------
 
 const account = {
-  displayName: 'Reinaldo Pereira',
-  email: 'demo@minimals.cc',
+  displayName: 'Manoela Costa',
+  email: 'manoela.costa@email.com',
   photoURL: '/static/mock-images/avatars/avatar_default.jpg'
 };
 

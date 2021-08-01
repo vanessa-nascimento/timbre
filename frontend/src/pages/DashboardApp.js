@@ -32,15 +32,20 @@ import {
 } from '../components/_dashboard/app';
 
 import USERLIST from '../_mocks_/user';
-
+import axios from "axios";
+import React from "react";
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Nome', alignRight: false },
-  { id: 'role', label: 'Categorias', alignRight: false },
-  { id: 'isVerified', label: 'Público', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'nome', label: 'Nome', alignRight: false },
+  { id: 'cod_evento', label: 'Código do Evento', alignRight: false },
+  { id: 'ingressos', label: 'Ingressos', alignRight: false },
+  { id: 'data_inicio', label: 'Data inicio', alignRight: false },
+  { id: 'min', label: 'Capacidade mínima', alignRight: false },
+  { id: 'max', label: 'Capacidade máxima', alignRight: false },
+  { id: 'e_publico', label: 'É público?', alignRight: false },
   { id: '' }
 ];
+
 
 // ----------------------------------------------------------------------
 
@@ -72,6 +77,7 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map((el) => el[0]);
 }
+const baseURL = "http://localhost:8080/api/eventos/organizador/";
 
 export default function DashboardApp() {
   
@@ -134,6 +140,18 @@ export default function DashboardApp() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const [eventosOrganizador, setEventosOrganizador] = React.useState(null);
+
+  React.useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      setEventosOrganizador(response.data);
+    });
+  }, []);
+
+
+
+  if (!eventosOrganizador) return null;
+
 
   return (
     <Page title="Painel do Anfitrião | TImbre">
@@ -158,69 +176,65 @@ export default function DashboardApp() {
                       onRequestSort={handleRequestSort}
                       onSelectAllClick={handleSelectAllClick}
                     />
-                    <TableBody>
-                      {filteredUsers
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((row) => {
-                          const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                          const isItemSelected = selected.indexOf(name) !== -1;
 
-                          return (
-                            <TableRow
-                              hover
-                              key={id}
-                              tabIndex={-1}
-                              role="checkbox"
-                              selected={isItemSelected}
-                              aria-checked={isItemSelected}
-                            >
-                              <TableCell padding="checkbox">
-                                <Checkbox
-                                  checked={isItemSelected}
-                                  onChange={(event) => handleClick(event, name)}
-                                />
-                              </TableCell>
-                              <TableCell component="th" scope="row" padding="none">
-                                <Stack direction="row" alignItems="center" spacing={2}>
-                                  <Avatar alt={name} src={avatarUrl} />
-                                  <Typography variant="subtitle2" noWrap>
-                                    {name}
-                                  </Typography>
-                                </Stack>
-                              </TableCell>
-                              <TableCell align="left">{company}</TableCell>
-                              <TableCell align="left">{role}</TableCell>
-                              <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                              <TableCell align="left">
-                                <Label
-                                  variant="ghost"
-                                  color={(status === 'banned' && 'error') || 'success'}
-                                >
-                                  {sentenceCase(status)}
-                                </Label>
-                              </TableCell>
+                <TableBody>
+                  {eventosOrganizador.map(row => {
+                      const { id_evento, cod_evento, nome, qt_convite, capacidade_min, capacidade_max, e_publico, data_inicio } = row;
+                      const isItemSelected = selected.indexOf(nome) !== -1;
 
-                              <TableCell align="right">
-                                <UserMoreMenu />
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      {emptyRows > 0 && (
-                        <TableRow style={{ height: 53 * emptyRows }}>
-                          <TableCell colSpan={6} />
-                        </TableRow>
-                      )}
-                    </TableBody>
-                    {isUserNotFound && (
-                      <TableBody>
-                        <TableRow>
-                          <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                            <SearchNotFound searchQuery={filterName} />
+                      return (
+                        <TableRow
+                          hover
+                          key={id_evento}
+                          tabIndex={-1}
+                          role="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, nome)}
+                            />
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Avatar alt={nome} />
+                              <Typography variant="subtitle2" noWrap>
+                              
+                                {nome}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left">{cod_evento}</TableCell>
+                          <TableCell align="left">{qt_convite}</TableCell>
+                          <TableCell align="left">{data_inicio}</TableCell>
+                          <TableCell align="left">{capacidade_min}</TableCell>
+                          <TableCell align="left">{capacidade_max}</TableCell>
+                          <TableCell align="left">{e_publico ? 'Sim' : 'Não'}</TableCell>
+                    
+
+                          <TableCell align="right">
+                            <UserMoreMenu />
                           </TableCell>
                         </TableRow>
-                      </TableBody>
-                    )}
+                      );
+                    })}
+                  {eventosOrganizador > 0 && (
+                    <TableRow style={{ height: 53 * eventosOrganizador }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+                {!eventosOrganizador && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <SearchNotFound searchQuery={filterName} />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
                   </Table>
                 </TableContainer>
               </Scrollbar>
