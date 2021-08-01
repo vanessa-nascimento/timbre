@@ -18,3 +18,8 @@ Entre na pasta frontend do projeto e utilize os seguintes comandos:
 
 - Para instalar o projeto, faça o seguinte comando no terminal: `npm install` ou `yarn install`
 - Para rodar o projeto, faça o seguinte comando no terminal: `npm run start` ou `yarn start`
+
+
+### Banco de Dados
+
+Pegue o arquivo dentro da pasta `banco-de-dados` e importe o banco pelo pgadmin
